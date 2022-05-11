@@ -32,6 +32,7 @@ import org.apache.catalina.startup.ClassLoaderFactory.Repository;
 import org.apache.catalina.startup.ClassLoaderFactory.RepositoryType;
 import org.apache.juli.logging.Log;
 import org.apache.juli.logging.LogFactory;
+import org.apache.tomcat.jni.Thread;
 
 /**
  * Bootstrap loader for Catalina.  This application constructs a class loader
@@ -104,7 +105,7 @@ public final class Bootstrap {
 
         catalinaHomeFile = homeFile;
         System.setProperty(
-                Constants.CATALINA_HOME_PROP, catalinaHomeFile.getPath());
+            Constants.CATALINA_HOME_PROP, catalinaHomeFile.getPath());
 
         // Then base
         String base = System.getProperty(Constants.CATALINA_BASE_PROP);
@@ -120,7 +121,7 @@ public final class Bootstrap {
             catalinaBaseFile = baseFile;
         }
         System.setProperty(
-                Constants.CATALINA_BASE_PROP, catalinaBaseFile.getPath());
+            Constants.CATALINA_BASE_PROP, catalinaBaseFile.getPath());
     }
 
     // -------------------------------------------------------------- Variables
@@ -245,6 +246,7 @@ public final class Bootstrap {
 
     /**
      * Initialize daemon.
+     *
      * @throws Exception Fatal initialization error
      */
     public void init() throws Exception {
@@ -274,7 +276,7 @@ public final class Bootstrap {
         Method method =
             startupInstance.getClass().getMethod(methodName, paramTypes);
         method.invoke(startupInstance, paramValues);
-
+       //  初始化了Catalina类
         catalinaDaemon = startupInstance;
     }
 
@@ -288,7 +290,7 @@ public final class Bootstrap {
         String methodName = "load";
         Object param[];
         Class<?> paramTypes[];
-        if (arguments==null || arguments.length==0) {
+        if (arguments == null || arguments.length == 0) {
             paramTypes = null;
             param = null;
         } else {
@@ -302,6 +304,7 @@ public final class Bootstrap {
         if (log.isDebugEnabled()) {
             log.debug("Calling startup class " + method);
         }
+        // catalina类load方法调用 此处读了server.xml文件
         method.invoke(catalinaDaemon, param);
     }
 
@@ -322,6 +325,7 @@ public final class Bootstrap {
 
     /**
      * Load the Catalina daemon.
+     *
      * @param arguments Initialization arguments
      * @throws Exception Fatal initialization error
      */
@@ -334,6 +338,7 @@ public final class Bootstrap {
 
     /**
      * Start the Catalina daemon.
+     *
      * @throws Exception Fatal start error
      */
     public void start() throws Exception {
@@ -341,8 +346,8 @@ public final class Bootstrap {
             init();
         }
 
-        Method method = catalinaDaemon.getClass().getMethod("start", (Class [])null);
-        method.invoke(catalinaDaemon, (Object [])null);
+        Method method = catalinaDaemon.getClass().getMethod("start", (Class[]) null);
+        method.invoke(catalinaDaemon, (Object[]) null);
     }
 
 
@@ -430,6 +435,7 @@ public final class Bootstrap {
 
 
     /**
+     * 启动入口在此处
      * Main method and entry point when starting Tomcat via the provided
      * scripts.
      *
@@ -442,6 +448,7 @@ public final class Bootstrap {
                 // Don't set daemon until init() has completed
                 Bootstrap bootstrap = new Bootstrap();
                 try {
+                    // 初始化了CatalinaDaemon
                     bootstrap.init();
                 } catch (Throwable t) {
                     handleThrowable(t);
@@ -464,8 +471,11 @@ public final class Bootstrap {
             }
 
             if (command.equals("startd")) {
+                // 启动
                 args[args.length - 1] = "start";
+                // load  启动了 server service connector endpoint  等init
                 daemon.load(args);
+                // 启动 server service connector endpoint  等start
                 daemon.start();
             } else if (command.equals("stopd")) {
                 args[args.length - 1] = "stop";

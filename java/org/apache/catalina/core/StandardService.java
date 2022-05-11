@@ -558,16 +558,18 @@ public class StandardService extends LifecycleMBeanBase implements Service {
             if (executor instanceof JmxEnabled) {
                 ((JmxEnabled) executor).setDomain(getDomain());
             }
+            // Initialize the Executor 初始化
             executor.init();
         }
 
-        // Initialize mapper listener
+        // Initialize mapper listener 初始化 mapperListener
         mapperListener.init();
 
         // Initialize our defined Connectors
         synchronized (connectorsLock) {
             for (Connector connector : connectors) {
                 try {
+                    // Initialize the connector 初始化
                     connector.init();
                 } catch (Exception e) {
                     String message = sm.getString(

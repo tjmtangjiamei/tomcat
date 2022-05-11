@@ -1080,6 +1080,7 @@ public class Connector extends LifecycleMBeanBase  {
         super.initInternal();
 
         // Initialize adapter
+        //
         adapter = new CoyoteAdapter(this);
         protocolHandler.setAdapter(adapter);
 
@@ -1108,6 +1109,7 @@ public class Connector extends LifecycleMBeanBase  {
         }
 
         try {
+            // Initialize the protocol handler
             protocolHandler.init();
         } catch (Exception e) {
             throw new LifecycleException(

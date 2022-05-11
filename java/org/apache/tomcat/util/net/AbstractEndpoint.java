@@ -1312,6 +1312,7 @@ public abstract class AbstractEndpoint<S,U> {
 
 
     protected void startAcceptorThread() {
+        //启动线程 监听端口 接收客户端的请求socket 链接
         acceptor = new Acceptor<>(this);
         String threadName = getName() + "-Acceptor";
         acceptor.setThreadName(threadName);

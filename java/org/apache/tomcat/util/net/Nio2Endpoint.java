@@ -429,6 +429,7 @@ public class Nio2Endpoint extends AbstractJsseEndpoint<Nio2Channel,AsynchronousS
                 if (!isPaused()) {
                     // Note: as a special behavior, the completion handler for accept is
                     // always called in a separate thread.
+                    //接收客户端的请求 socket请求
                     serverSock.accept(null, this);
                 } else {
                     state = AcceptorState.PAUSED;

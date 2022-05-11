@@ -307,7 +307,7 @@ public class Catalina {
                             "org.apache.catalina.Server");
 
         digester.addObjectCreate("Server/GlobalNamingResources",
-                                 "org.apache.catalina.deploy.NamingResourcesImpl");
+                                 "org.apache.catalina.deploy. ");
         digester.addSetProperties("Server/GlobalNamingResources");
         digester.addSetNext("Server/GlobalNamingResources",
                             "setGlobalNamingResources",
@@ -550,6 +550,8 @@ public class Catalina {
         initNaming();
 
         // Create and execute our Digester
+        //Digester 是 tomcat 的  xml文件解析工具
+        //解析的是server.xml文件
         Digester digester = createStartDigester();
 
         InputSource inputSource = null;
@@ -643,6 +645,7 @@ public class Catalina {
 
         // Start the new server
         try {
+            // server 初始化
             getServer().init();
         } catch (LifecycleException e) {
             if (Boolean.getBoolean("org.apache.catalina.startup.EXIT_ON_INIT_FAILURE")) {

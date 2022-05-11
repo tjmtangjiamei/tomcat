@@ -871,6 +871,7 @@ public final class StandardServer extends LifecycleMBeanBase implements Server {
         }
         // Initialize our defined Services
         for (Service service : services) {
+            // Initialize the service 初始化 模版方法
             service.init();
         }
     }

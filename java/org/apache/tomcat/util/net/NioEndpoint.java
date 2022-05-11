@@ -196,7 +196,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel,SocketChannel> 
      * Initialize the endpoint.
      */
     @Override
-    public void bind() throws Exception {
+    public void  bind() throws Exception {
         initServerSocket();
 
         setStopLatch(new CountDownLatch(1));
@@ -218,9 +218,11 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel,SocketChannel> 
                 throw new IllegalArgumentException(sm.getString("endpoint.init.bind.inherited"));
             }
         } else {
+            // Create a new channel
             serverSock = ServerSocketChannel.open();
             socketProperties.setProperties(serverSock.socket());
             InetSocketAddress addr = new InetSocketAddress(getAddress(), getPortWithOffset());
+           // 绑定对应的端口
             serverSock.socket().bind(addr,getAcceptCount());
         }
         serverSock.configureBlocking(true); //mimic APR behavior
@@ -263,7 +265,7 @@ public class NioEndpoint extends AbstractJsseEndpoint<NioChannel,SocketChannel> 
             pollerThread.setPriority(threadPriority);
             pollerThread.setDaemon(true);
             pollerThread.start();
-
+// 开启接收线程
             startAcceptorThread();
         }
     }
